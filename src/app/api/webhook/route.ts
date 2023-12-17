@@ -10,6 +10,9 @@ export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
+    console.log(
+      "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
+    );
     throw new Error(
       "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
     );
@@ -103,6 +106,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: "OK", user: deletedUser });
   }
-
+  if (eventType === "email.created") {
+    console.log("Hi");
+  }
   return new Response("", { status: 200 });
 }
