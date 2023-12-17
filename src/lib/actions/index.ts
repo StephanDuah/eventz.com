@@ -10,10 +10,11 @@ export const CreateUser = async (user: CreateUserParams) => {
   try {
     await connectToDB();
 
-    const newUser = await User.create();
+    const newUser = await User.create(user);
 
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
+    console.log(error);
     handleError(error);
   }
 };
