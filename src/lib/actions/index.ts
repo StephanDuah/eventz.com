@@ -12,7 +12,7 @@ export const CreateUser = async (user: CreateUserParams) => {
 
     const newUser = await User.create();
 
-    return JSON.stringify(newUser);
+    return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
     handleError(error);
   }
