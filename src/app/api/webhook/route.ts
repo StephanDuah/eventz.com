@@ -59,16 +59,16 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   if (eventType === "user.created") {
-    const { id, username, image_url, email_addresses, first_name, last_name } =
+    const { id, email_addresses, image_url, first_name, last_name, username } =
       evt.data;
 
     const user = {
       clerkId: id,
-      username: username!,
-      photo: image_url,
       email: email_addresses[0].email_address,
+      username: username!,
       firstName: first_name,
       lastName: last_name,
+      photo: image_url,
     };
 
     const newUser = await CreateUser(user);
@@ -80,9 +80,7 @@ export async function POST(req: Request) {
         },
       });
     }
-
-    console.log(newUser);
-
+    console.log("Saved");
     return NextResponse.json({ message: "OK", user: newUser });
   }
 
@@ -108,8 +106,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: "OK", user: deletedUser });
   }
-  if (eventType === "email.created") {
-    console.log("Hi");
-  }
+
   return new Response("", { status: 200 });
 }
