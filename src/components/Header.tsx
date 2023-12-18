@@ -112,9 +112,12 @@ const Header = () => {
           <a href="#" className="font-semibold text-sm leading-6">
             Location
           </a>
-          <a href="#" className="font-semibold text-sm leading-6">
+          <Link
+            href="/events/create"
+            className="font-semibold text-sm leading-6"
+          >
             Create Events
-          </a>
+          </Link>
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <SignedOut>
@@ -186,12 +189,12 @@ const Header = () => {
                   >
                     Location
                   </a>
-                  <a
-                    href="#"
+                  <Link
+                    href="/events/create"
                     className="font-semibold text-base text-white leading-6  px-3 py-2 -mx-3 block   rounded-xl  hover:bg-[#3c1053]/50"
                   >
                     Create Events
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
