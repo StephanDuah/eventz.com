@@ -1,5 +1,5 @@
 "use client";
-import React, { startTransition, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { ICategory } from "@/lib/models/Category";
 import { Input } from "./ui/input";
+import { createCategory, getAllCategory } from "@/lib/actions";
+import { get } from "http";
 
 type DropdownType = {
   value: string;
@@ -29,16 +31,32 @@ type DropdownType = {
 function Dropdown({ value, handleChange }: DropdownType) {
   const [category, setCategory] = useState<ICategory[]>([]);
   const [newCategory, setNewCategory] = useState("");
-  const handleAdd = () => {};
+  const handleAdd = () => {
+    createCategory({ categoryName: newCategory }).then((category) => {
+      setCategory((prevState) => [...prevState, category]);
+    });
+  };
+  useEffect(() => {
+    const getCategory = async () => {
+      const categoryList = await getAllCategory();
+
+      categoryList && setCategory(categoryList);
+    };
+
+    getCategory();
+  }, [category]);
   return (
-    <Select>
+    <Select onValueChange={handleChange} defaultValue="value">
       <SelectTrigger className="select-field">
         <SelectValue placeholder="CategoryId" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="light">Light</SelectItem>
-        <SelectItem value="dark">Dark</SelectItem>
-        <SelectItem value="system">System</SelectItem>
+        {category.map((item) => (
+          <SelectItem key={item.name} value={item._id}>
+            {item.name}
+          </SelectItem>
+        ))}
+
         <AlertDialog>
           <AlertDialogTrigger className="p-medium-14 flex w-full pl-8 rounded-sm py-3 text-primary-500 focus:text-primary-500 hover:bg-primary-50">
             Open

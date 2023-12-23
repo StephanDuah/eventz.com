@@ -1,6 +1,6 @@
-import mongoose, { model, models } from "mongoose";
+import mongoose, { model } from "mongoose";
 import { Schema, Document, Types } from "mongoose";
-
+mongoose;
 export interface IEvents extends Document {
   title: string;
   description?: string;
@@ -61,4 +61,4 @@ const eventSchema = new Schema<IEvents>({
   },
 });
 
-export const Event = models.Event || model("event", eventSchema);
+export const Event = mongoose.models.Event || model("Event", eventSchema);

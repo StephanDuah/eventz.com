@@ -7,10 +7,8 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -28,14 +26,19 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Checkbox } from "./ui/checkbox";
+import { useUploadThing } from "@/lib/uploadthing";
+import { handleError } from "@/lib/utils";
+import { createEvent } from "@/lib/actions/eventActions";
+import { useRouter } from "next/navigation";
 
 type EventFormTypes = {
-  id: String;
+  userId: string;
   type: "Create" | "Update";
 };
 
 const initValues = eventDefaultValues;
-const EventForm = ({ id, type }: EventFormTypes) => {
+const EventForm = ({ userId, type }: EventFormTypes) => {
+  const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof EventFormSchema>>({
     resolver: zodResolver(EventFormSchema),
@@ -43,12 +46,40 @@ const EventForm = ({ id, type }: EventFormTypes) => {
   });
 
   const [files, setFiles] = useState<File[]>([]);
+  const { startUpload } = useUploadThing("imageUploader");
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof EventFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof EventFormSchema>) {
+    let uploadedImageUrl = values.url;
+    if (files.length > 0) {
+      const uploadedImage = await startUpload(files);
+
+      if (!uploadedImage) {
+        return;
+      }
+
+      uploadedImageUrl = uploadedImage[0].url;
+    }
+
+    if (type === "Create") {
+      try {
+        const newEvent = await createEvent({
+          event: { ...values, imageUrl: uploadedImageUrl },
+          userId,
+          path: "/profile",
+        });
+
+        if (newEvent) {
+          form.reset();
+          router.push(`/events/${newEvent._id}`);
+        }
+
+        return JSON.parse(JSON.stringify(newEvent));
+      } catch (error) {
+        console.log(error);
+        handleError(error);
+      }
+    }
   }
 
   return (
@@ -81,7 +112,7 @@ const EventForm = ({ id, type }: EventFormTypes) => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <Dropdown value="dsadfa" handleChange={() => {}} />
+                  <Dropdown value={field.value} handleChange={field.onChange} />
                 </FormControl>
 
                 <FormMessage />
@@ -109,7 +140,7 @@ const EventForm = ({ id, type }: EventFormTypes) => {
           />
           <FormField
             control={form.control}
-            name="imageUrl"
+            name="imageURL"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl className="h-72"></FormControl>
@@ -201,20 +232,20 @@ const EventForm = ({ id, type }: EventFormTypes) => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <div className="flex items-center  bg-grey-50 px-2 h-[54px] py-2 rounded-full">
-                    <CurrencyDollarIcon className="h-6 text-grey-500" />
+                  <div className="flex items-center  bg-grey-50 px-2 h-[54px] py-2 rounded-full justify-between">
+                    <CurrencyDollarIcon className=" text-grey-500 h-10" />
                     <Input
                       type="number"
                       placeholder="Price"
                       {...field}
-                      className="input-field "
+                      className="input-field"
                     />
 
                     <FormField
                       control={form.control}
                       name="isFree"
                       render={({ field }) => (
-                        <FormItem className="w-full">
+                        <FormItem>
                           <FormControl>
                             <div className="flex items-center">
                               <label
@@ -224,8 +255,10 @@ const EventForm = ({ id, type }: EventFormTypes) => {
                                 Free Ticket
                               </label>
                               <Checkbox
+                                onCheckedChange={field.onChange}
+                                checked={field.value}
                                 id="isFree"
-                                className="mr-2 h-5 w-5 border-2 border-primary-500"
+                                className="mr-2 h-5 w-5 border-2 border-primary-500 "
                               />
                             </div>
                           </FormControl>
@@ -242,9 +275,35 @@ const EventForm = ({ id, type }: EventFormTypes) => {
             )}
           />
         </div>
+        <div className="flex flex-col gap-5 md:flex-row">
+          <FormField
+            control={form.control}
+            name="url"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <div className="flex items-center  bg-grey-50 px-2 h-[54px] py-2 rounded-full">
+                    <MapPinIcon className="h-6 text-grey-500" />
+                    <Input
+                      placeholder="Url"
+                      {...field}
+                      className="input-field"
+                    />
+                  </div>
+                </FormControl>
 
-        <Button type="submit" size="lg" className="button col-span-2 w-full">
-          Submit
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <Button
+          type="submit"
+          size="lg"
+          disabled={form.formState.isSubmitting}
+          className="button col-span-2 w-full"
+        >
+          {form.formState.isSubmitting ? "Submitting..." : `${type} Event `}
         </Button>
       </form>
     </Form>

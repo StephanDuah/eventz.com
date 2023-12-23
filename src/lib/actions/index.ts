@@ -8,8 +8,13 @@ import User from "../models/User";
 import Event from "../models/Order";
 import { handleError } from "@/lib/utils";
 
-import { CreateUserParams, UpdateUserParams } from "@/types";
+import {
+  CreateCategoryParams,
+  CreateUserParams,
+  UpdateUserParams,
+} from "@/types";
 import Order from "../models/Order";
+import Category from "../models/Category";
 
 export async function createUser(user: CreateUserParams) {
   try {
@@ -85,3 +90,25 @@ export async function deleteUser(clerkId: string) {
     handleError(error);
   }
 }
+
+export const createCategory = async ({
+  categoryName,
+}: CreateCategoryParams) => {
+  try {
+    await connectToDB();
+    const newCategory = await Category.create({ name: categoryName });
+    return JSON.parse(JSON.stringify(newCategory));
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getAllCategory = async () => {
+  try {
+    await connectToDB();
+    const Categories = await Category.find({});
+    return JSON.parse(JSON.stringify(Categories));
+  } catch (error) {
+    handleError(error);
+  }
+};

@@ -31,6 +31,6 @@ const EventSchema = new Schema({
   organizer: { type: Schema.Types.ObjectId, ref: "User" },
 });
 
-const Event = models.Event || model("Event", EventSchema);
+const Order = models.Order || model("Order", EventSchema);
 
-export default Event;
+export default Order;
