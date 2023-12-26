@@ -30,14 +30,23 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { handleError } from "@/lib/utils";
 import { createEvent } from "@/lib/actions/eventActions";
 import { useRouter } from "next/navigation";
+import { IEvents } from "@/lib/models/Event";
 
 type EventFormTypes = {
   userId: string;
   type: "Create" | "Update";
+  event?: IEvents;
 };
 
-const initValues = eventDefaultValues;
-const EventForm = ({ userId, type }: EventFormTypes) => {
+const EventForm = ({ userId, type, event }: EventFormTypes) => {
+  const initValues =
+    event && type === "Update"
+      ? {
+          ...event,
+          startDateTime: new Date(event.startDateTime),
+          endDateTime: new Date(event.endDateTime),
+        }
+      : eventDefaultValues;
   const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof EventFormSchema>>({
