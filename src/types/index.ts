@@ -22,7 +22,7 @@ export type CreateEventParams = {
     title: string;
     description: string;
     location: string;
-    imageUrl: string;
+    imageURL: string;
     startDateTime: Date;
     endDateTime: Date;
     categoryId: string;
@@ -38,7 +38,7 @@ export type UpdateEventParams = {
   event: {
     _id: string;
     title: string;
-    imageUrl: string;
+    imageURL: string;
     description: string;
     location: string;
     startDateTime: Date;
@@ -70,8 +70,8 @@ export type GetEventsByUserParams = {
 };
 
 export type GetRelatedEventsByCategoryParams = {
-  categoryId: string;
-  eventId: string;
+  categoryId?: string;
+  eventId?: string;
   limit?: number;
   page: number | string;
 };
@@ -82,7 +82,7 @@ export type Event = {
   description: string;
   price: string;
   isFree: boolean;
-  imageUrl: string;
+  imageURL: string;
   location: string;
   startDateTime: Date;
   endDateTime: Date;

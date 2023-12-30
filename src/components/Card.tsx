@@ -28,7 +28,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardParamsType) => {
       />
       {isCreator && !hidePrice && (
         <div className="absolute right-2 top-2 flex flex-col bg-white transition-all rounded-xl shadow-sm gap-4 p-3">
-          <Link href={`events/${event._id}/update`}>
+          <Link href={`${event._id}/update`}>
             <PencilSquareIcon className="h-5 w-5 hover:text-primary transition-colors duration-200" />
           </Link>
           <DeleteConfirmation eventId={event._id} />

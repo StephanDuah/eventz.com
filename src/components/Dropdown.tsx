@@ -46,9 +46,9 @@ function Dropdown({ value, handleChange }: DropdownType) {
     getCategory();
   }, [category]);
   return (
-    <Select onValueChange={handleChange} defaultValue="value">
+    <Select onValueChange={handleChange} defaultValue={value}>
       <SelectTrigger className="select-field">
-        <SelectValue placeholder="CategoryId" />
+        <SelectValue placeholder="Category" />
       </SelectTrigger>
       <SelectContent>
         {category.map((item) => (

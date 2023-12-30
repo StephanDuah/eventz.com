@@ -31,6 +31,7 @@ import { handleError } from "@/lib/utils";
 import { createEvent } from "@/lib/actions/eventActions";
 import { useRouter } from "next/navigation";
 import { IEvents } from "@/lib/models/Event";
+import { updateEvent } from "@/lib/actions/eventActions";
 
 type EventFormTypes = {
   userId: string;
@@ -59,23 +60,48 @@ const EventForm = ({ userId, type, event }: EventFormTypes) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof EventFormSchema>) {
-    let uploadedImageUrl = values.url;
+    var uploadedImageUrl = values.imageURL;
     if (files.length > 0) {
-      const uploadedImage = await startUpload(files);
-
-      if (!uploadedImage) {
+      const uploadedImages = await startUpload(files);
+      console.log(uploadedImages);
+      if (!uploadedImages) {
         return;
       }
 
-      uploadedImageUrl = uploadedImage[0].url;
+      uploadedImageUrl = uploadedImages[0].url;
     }
 
     if (type === "Create") {
       try {
         const newEvent = await createEvent({
-          event: { ...values, imageUrl: uploadedImageUrl },
+          event: { ...values, imageURL: uploadedImageUrl },
           userId,
           path: "/profile",
+        });
+
+        if (newEvent) {
+          form.reset();
+
+          router.push(`/events/${newEvent._id}`);
+        }
+
+        return JSON.parse(JSON.stringify(newEvent));
+      } catch (error) {
+        console.log(error);
+        handleError(error);
+      }
+    }
+
+    if (type === "Update") {
+      try {
+        if (!event?._id) {
+          return router.back();
+        }
+        const newEvent = await updateEvent({
+          event: { ...values, imageURL: uploadedImageUrl, _id: event._id },
+          userId,
+
+          path: `/events/${event._id}`,
         });
 
         if (newEvent) {
@@ -158,6 +184,7 @@ const EventForm = ({ userId, type, event }: EventFormTypes) => {
                   imageUrl={field.value}
                   setFiles={setFiles}
                 />
+                <div>{field.value}</div>
                 <FormMessage />
               </FormItem>
             )}

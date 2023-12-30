@@ -1,4 +1,7 @@
-import { getAllEvents } from "@/lib/actions/eventActions";
+import {
+  getAllEvents,
+  getRelatedEventsByCategory,
+} from "@/lib/actions/eventActions";
 import { IEvents } from "@/lib/models/Event";
 import React from "react";
 import Card from "./Card";
@@ -9,8 +12,14 @@ type CollectionParamsTypes = {
   limit: number;
   page: number | string;
   totalPage?: number;
-  collectionType?: "All_Events" | "Events_Organized" | "My_Tickets";
+  collectionType:
+    | "All_Events"
+    | "Events_Organized"
+    | "My_Tickets"
+    | "Related_Events";
   urlParamName?: string;
+  categoryId?: string;
+  eventId?: string;
 };
 
 const Collection = async ({
@@ -20,6 +29,8 @@ const Collection = async ({
   totalPage = 0,
   collectionType,
   urlParamName,
+  categoryId,
+  eventId,
 }: CollectionParamsTypes) => {
   const events = await getAllEvents({
     query: "",
@@ -28,13 +39,25 @@ const Collection = async ({
     limit: 6,
   });
 
-  const data = events?.data;
+  const geteventbyCategory = await getRelatedEventsByCategory({
+    categoryId,
+    eventId,
+    limit: 6,
+    page,
+  });
+
+  const data =
+    collectionType === "All_Events"
+      ? events?.data
+      : collectionType === "Related_Events"
+      ? geteventbyCategory?.data
+      : events?.data;
 
   return (
     <>
       {data.length > 0 ? (
         <div className="flex flex-col items-center gap-5">
-          <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 w-full lg:grid-cols-3 xl:gap-10">
+          <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 w-full lg:grid-cols-4  xl:gap-10">
             {data.map((item: any) => {
               const hidePrice = collectionType === "My_Tickets";
               const hasOrderLink = collectionType === "Events_Organized";

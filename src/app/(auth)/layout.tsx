@@ -17,8 +17,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <Header />
-        {children}
+        <main className="flex justify-center w-full h-screen overflow-hidden items-center">
+          {children}
+        </main>
       </body>
     </html>
   );
