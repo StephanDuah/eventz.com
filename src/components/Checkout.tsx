@@ -4,7 +4,7 @@ import React from 'react'
 import { SignedIn, SignedOut, useUser } from '@clerk/nextjs'
 import Link from 'next/link'
 import { Button } from './ui/button'
-import PayStackButton from './PayStackButton'
+import PayStackButton from './PayStackButton2'
 
 const Checkout = ({event}:{event:IEvents}) => {
 
