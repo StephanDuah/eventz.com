@@ -1,5 +1,6 @@
 import {
   getAllEvents,
+  getEventsByUser,
   getRelatedEventsByCategory,
 } from "@/lib/actions/eventActions";
 import { IEvents } from "@/lib/models/Event";
@@ -20,6 +21,7 @@ type CollectionParamsTypes = {
   urlParamName?: string;
   categoryId?: string;
   eventId?: string;
+  userId?: string;
 };
 
 const Collection = async ({
@@ -31,6 +33,7 @@ const Collection = async ({
   urlParamName,
   categoryId,
   eventId,
+  userId,
 }: CollectionParamsTypes) => {
   const events = await getAllEvents({
     query: "",
@@ -46,11 +49,15 @@ const Collection = async ({
     page,
   });
 
+  const geteventbyUser = await getEventsByUser({ userId, page: 1 });
+  console.log(geteventbyUser?.data);
   const data =
     collectionType === "All_Events"
       ? events?.data
       : collectionType === "Related_Events"
       ? geteventbyCategory?.data
+      : collectionType === "Events_Organized"
+      ? geteventbyUser?.data
       : events?.data;
 
   return (

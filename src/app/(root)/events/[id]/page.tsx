@@ -5,6 +5,7 @@ import React from "react";
 import { CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/solid";
 import { formatDateTime } from "@/lib/utils";
 import Collection from "@/components/Collection";
+import Checkout from "@/components/Checkout";
 const page = async ({ params: { id } }: SearchParamProps) => {
   const event = await getEventDetails(id);
   if (!event) {
@@ -13,14 +14,14 @@ const page = async ({ params: { id } }: SearchParamProps) => {
 
   return (
     <>
-      <section className="flex flex-col md:flex-row justify-center bg-primary-50   ">
+      <section className="flex flex-col md:flex-row justify-center bg-primary-50 overflow-x-hidden  ">
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
           <Image
             src={event.imageURL}
             width={1000}
             height={1000}
             alt={event.title}
-            className="h-full object-cover max-h-[400px] my-20"
+            className="h-full object-cover max-h-[700px] my-0 md:my-20"
           />
           <div className="flex w-full flex-col gap-8 p-5 md:p-10">
             <div className="flex w-full flex-col p-5 md:p-10 gap-8">
@@ -44,11 +45,12 @@ const page = async ({ params: { id } }: SearchParamProps) => {
                 </div>
               </div>
               <div>
-                <button className="px-4 py-2 bg-green-700 text-white rounded-full">
+                <Checkout event={event}/>
+                {/* <button className="">
                   {event.isFree
                     ? "Get Ticket"
                     : `By Tickect GHC ${event.price}`}
-                </button>
+                </button> */}
               </div>
               <div className="flex flex-col gap-5">
                 <div className="flex gap-2 md:gap-3">
@@ -70,9 +72,9 @@ const page = async ({ params: { id } }: SearchParamProps) => {
                   <p className="text-sm font-semibold">{event.location}</p>
                 </div>
 
-                <div className="my-8">
+                <div className="my-8 w-100">
                   <h2 className="p-bold-20">What you will learn</h2>
-                  <p className="leading-10">{event.description}</p>
+                  <p className="leading-10 w-100 break-words">{event.description}</p>
                   <p className="p-regular-50 text-primary underline">
                     {event.url}
                   </p>

@@ -11,12 +11,12 @@ export const connectToDB = async () => {
     cached.promise =
       cached.promise ||
       (await mongoose.connect(MONGO_URI, {
-        dbName: "eventz",
+        dbName: "test",
         bufferCommands: false,
       }));
 
     cached.conn = await cached.promise;
-
+     console.log("dbconnected")
     return cached.conn;
   } catch (error) {
     console.log(error);

@@ -1,8 +1,12 @@
+import Collection from "@/components/Collection";
 import { Button } from "@/components/ui/button";
+import { auth } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 
 const Profile = () => {
+  const { sessionClaims } = auth();
+  const userId = sessionClaims?.userId as string;
   return (
     <>
       {/* tickets */}
@@ -24,6 +28,16 @@ const Profile = () => {
             <Link href="/#events">Explore Events</Link>
           </Button>
         </div>
+
+        <Collection
+          page={1}
+          collectionType="Events_Organized"
+          totalPage={10}
+          limit={12}
+          emptyTitle="No events found"
+          emptyStateSubText="come back later"
+          userId={userId}
+        />
       </section>
     </>
   );
