@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { connectToDB } from "@/lib/database";
 import User from "../models/User";
 
-import Event from "../models/Order";
+import { Event } from "../models/Event";
 import { handleError } from "@/lib/utils";
 
 import {

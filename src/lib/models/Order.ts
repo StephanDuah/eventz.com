@@ -2,7 +2,7 @@ import { Schema, model, models, Document } from 'mongoose'
 
 export interface IOrder extends Document {
   createdAt: Date
-  stripeId: string
+  referenceId: string
   totalAmount: string
   event: {
     _id: string
@@ -29,7 +29,7 @@ const OrderSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  stripeId: {
+  referenceId: {
     type: String,
     required: true,
     unique: true,
@@ -47,6 +47,8 @@ const OrderSchema = new Schema({
   },
 })
 
-const Order = models.Order || model('Order', OrderSchema)
+console.log(models)
+
+const Order = models.Order ||  model('Order', OrderSchema)
 
 export default Order

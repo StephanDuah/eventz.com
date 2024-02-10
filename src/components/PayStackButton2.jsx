@@ -1,28 +1,14 @@
 "use client";
-import { createOrder } from "@/lib/actions/orderActions";
-import { IEvents } from "@/lib/models/Event";
-import { IOrderItem } from "@/lib/models/Order";
-import { randomUUID } from "crypto";
-import { redirect } from "next/navigation";
+
 import React, { useState } from "react";
 import { PaystackButton } from "react-paystack";
-
-
-
-
-
-
-// refrenceId: { type: String, required: true, unique:true },
-// createdAt: { type: Date, default: Date.now },
-// totalAmount :{type:Number,required:true},
-// event: { type: Schema.Types.ObjectId, ref: "Event" },
-// buyer: { type: Schema.Types.ObjectId, ref: "User" },
+import { createOrder } from "@/lib/actions/orderActions";
+import { randomUUID } from "crypto";
 
 
 const PayStackButton = ({ userId, data,  email,className, text }) => {
-  
-
   const handlePaystackSuccessAction = async (reference) => {
+  try{
     if(reference.status === 'success'){
       const order= {
         referenceId: reference.reference,
@@ -32,12 +18,14 @@ const PayStackButton = ({ userId, data,  email,className, text }) => {
         eventId: data._id,
        
       }
-     
-      await createOrder(order) 
 
-      
+      await createOrder(order)
 
-
+ 
+  }
+  }catch(e){
+    console.log(e)
+    
     }
   };
   const compontProps = {
@@ -46,9 +34,7 @@ const PayStackButton = ({ userId, data,  email,className, text }) => {
     publicKey: "pk_test_477e0a6ba869e4ebdf925fd5c63aa2a049411faa",
     text,
     reference: new Date().getTime().toString() + (Math.floor(Math.random() * 1000000) + 1),
-    currency: "GHS",
-    
-    
+    currency: "GHS",  
     onSuccess: (reference) => handlePaystackSuccessAction(reference),
     onClose: () => alert("User cancelled Payment"),
   };

@@ -80,7 +80,7 @@ const Header = () => {
               leaveFrom="transform scale-100 opacity-100"
               leaveTo="transform scale-95 opacity-0"
             >
-              <Popover.Panel className="absolute -left-8 top-full shadow-lg w-screen max-w-md overflow-hidden rounded-3xl ring-1 ring-[#ad5389]/5 bg-white">
+              <Popover.Panel className="absolute z-20 -left-8 top-full shadow-lg w-screen max-w-md overflow-hidden rounded-3xl ring-1 ring-[#ad5389]/5 bg-white">
                 <div className="p-4">
                   {eventsSubNavigations.map((item) => (
                     <div

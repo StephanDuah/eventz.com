@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const MONGO_URI = process.env.MONGODB_URI;
+const MONGO_URI = process.env.MONGODB_URI || '';
 
 let cached = (global as any).mongoose || { con: null, promise: null };
 
@@ -22,3 +22,5 @@ export const connectToDB = async () => {
     console.log(error);
   }
 };
+
+

@@ -31,7 +31,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardParamsType) => {
           <Link href={`${event._id}/update`}>
             <PencilSquareIcon className="h-5 w-5 hover:text-primary transition-colors duration-200" />
           </Link>
-          <DeleteConfirmation eventId={event._id} />
+          <DeleteConfirmation eventId={event._id} /> 
         </div>
       )}
       <Link

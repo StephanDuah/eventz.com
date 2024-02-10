@@ -19,6 +19,7 @@ const Profile = () => {
         </div>
       </section>
       {/* Tickets collection */}
+      <Collection page={1} collectionType="My_Tickets" totalPage={10} limit={12} emptyTitle="No events found" emptyStateSubText="come back later" userId={userId} />
 
       {/* my Events collection */}
       <section className="bg-primary-50 py-5 md:py-10">

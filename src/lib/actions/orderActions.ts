@@ -1,12 +1,12 @@
-'use server '
+'use server'
 
 import { CheckoutOrderParams } from "@/types"
-import Order, { IOrderItem } from "../models/Order"
+import Order from "../models/Order"
 import { connectToDB } from "../database"
 
 import { handleError } from "../utils"
 
-
+import { redirect } from "next/navigation"
 
 export const createOrder = async (order:CheckoutOrderParams) => {
   
@@ -18,9 +18,11 @@ export const createOrder = async (order:CheckoutOrderParams) => {
         event: order.eventId,
         buyer: order.buyerId,
       });
-  
-      return JSON.parse(JSON.stringify(newOrder));
+      console.log(newOrder)
+     
     } catch (error) {
       handleError(error);
     }
+   
+    redirect('/profile')
 }
