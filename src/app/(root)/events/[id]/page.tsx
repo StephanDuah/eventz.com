@@ -6,6 +6,7 @@ import { CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/solid";
 import { formatDateTime } from "@/lib/utils";
 import Collection from "@/components/Collection";
 import Checkout from "@/components/Checkout";
+import CheckoutCard from "@/components/CheckoutCard";
 const page = async ({ params: { id } }: SearchParamProps) => {
   const event = await getEventDetails(id);
   if (!event) {
@@ -14,17 +15,24 @@ const page = async ({ params: { id } }: SearchParamProps) => {
 
   return (
     <>
-      <section className="flex flex-col md:flex-row justify-center bg-primary-50 overflow-x-hidden  ">
-        <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
+      <section className="flex flex-col md:flex-row justify-center bg-primary-50 overflow-x-hidden relative ">
+      
+
+        <div className="flex flex-col 2xl:max-w-[1400px]">
+          <div className="flex flex-col md:flex-row gap-10 p-5 my-20 relative">
+           
           <Image
             src={event.imageURL}
             width={1000}
             height={1000}
             alt={event.title}
-            className="h-full object-cover max-h-[700px] my-0 md:my-20"
+            className="h-full object-cover max-h-[500px]  rounded-lg"
           />
-          <div className="flex w-full flex-col gap-8 p-5 md:p-10">
-            <div className="flex w-full flex-col p-5 md:p-10 gap-8">
+          <CheckoutCard event={event}/>
+          </div>
+        {/* Event details ----- Event   */}
+          <div className="flex w-full flex-col gap-8 p-5 ">
+            <div className="flex w-full flex-col   gap-8">
               <div className="flex flex-col gap-6">
                 <h2 className="h2-bold">{event.title}</h2>
                 <div className="flex flex-col  gap-3 sm:flex-row sm:items-center">
@@ -44,14 +52,7 @@ const page = async ({ params: { id } }: SearchParamProps) => {
                   </p>
                 </div>
               </div>
-              <div>
-                <Checkout event={event}/>
-                {/* <button className="">
-                  {event.isFree
-                    ? "Get Ticket"
-                    : `By Tickect GHC ${event.price}`}
-                </button> */}
-              </div>
+            
               <div className="flex flex-col gap-5">
                 <div className="flex gap-2 md:gap-3">
                   <CalendarDaysIcon color="orange" className="h-6 w-6" />
@@ -62,7 +63,7 @@ const page = async ({ params: { id } }: SearchParamProps) => {
                     </p>
                     /{" "}
                     <p>
-                      {formatDateTime(event.endDateTime).dateOnly} -{" "}
+                      {formatDateTime(event.endDateTime).dateOnly} - {" "}
                       {formatDateTime(event.endDateTime).timeOnly}
                     </p>
                   </div>
@@ -81,12 +82,14 @@ const page = async ({ params: { id } }: SearchParamProps) => {
                 </div>
               </div>
             </div>
-          </div>
+               </div>
         </div>
       </section>
+
+      {/* related events */}
       <section className="p-5 ">
         <h3 className="text-2xl font-semibold text-left sm:text-center">
-          Related Events
+          {/* Related Events */}
         </h3>
         <Collection
           totalPage={2}

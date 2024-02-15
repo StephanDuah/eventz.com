@@ -63,9 +63,9 @@ const Collection = async ({
   return (
     <>
       {data.length > 0 ? (
-        <div className="flex flex-col items-center gap-5 xl:px-32 lg:px-24 md:px-16">
+        <div className="flex flex-col items-center gap-5 max-w-[1440px] mx-auto px-8 md:px-16">
           <h1 className="text-3xl text-gray-700 font-semibold">All Events</h1>
-          <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 w-full xl:grid-cols-4 lg:grid-cols-3  xl:gap-10">
+          <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 w-full  lg:grid-cols-4  xl:gap-10">
             {data.map((item: any) => {
               const hidePrice = collectionType === "My_Tickets";
               const hasOrderLink = collectionType === "Events_Organized";
